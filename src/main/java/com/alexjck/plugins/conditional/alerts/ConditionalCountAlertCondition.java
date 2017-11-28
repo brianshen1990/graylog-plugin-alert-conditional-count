@@ -188,11 +188,16 @@ public class ConditionalCountAlertCondition extends AbstractAlertCondition {
 
     @Override
     public String getDescription() {
-        return "time: " + time
-                + ", threshold_type: " + thresholdType.toString().toLowerCase(Locale.ENGLISH)
-                + ", threshold: " + threshold
-                + ", grace: " + grace
-                + ", query: " + query
-                + ", repeat notifications: " + repeatNotifications;
+        return "时间: " + time
+                + ", 临界类型: " + thresholdType.getDescription()
+                + ", 临界值: " + threshold
+                + ", 宽限期: " + grace
+                + ", 查找条件: " + query
+                + ", 重复通知: " + ((repeatNotifications)?"是":"否");
+    }
+
+    @Override
+    public String toString() {
+        return id + ": 消息 搜索条件-数目 告警条件 ={" + getDescription() + "}" + ", 数据流:={" + stream + "}";
     }
 }
