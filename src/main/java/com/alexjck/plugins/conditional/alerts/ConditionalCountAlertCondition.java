@@ -42,8 +42,8 @@ public class ConditionalCountAlertCondition extends AbstractAlertCondition {
 
     enum ThresholdType {
 
-        MORE("more than"),
-        LESS("less than");
+        MORE("多于"),
+        LESS("少于");
 
         private final String description;
 
@@ -87,16 +87,16 @@ public class ConditionalCountAlertCondition extends AbstractAlertCondition {
         @Override
         public ConfigurationRequest getRequestedConfiguration() {
             final ConfigurationRequest configurationRequest = ConfigurationRequest.createWithFields(
-                    new TextField("query", "Query", "", "Query that should be checked", ConfigurationField.Optional.NOT_OPTIONAL),
-                    new NumberField("time", "Time Range", 5, "Evaluate the condition for all messages received in the given number of minutes", ConfigurationField.Optional.NOT_OPTIONAL),
+                    new TextField("query", "查找条件", "", "查找条件", ConfigurationField.Optional.NOT_OPTIONAL),
+                    new NumberField("time", "时间区域", 5, "以分钟为单位", ConfigurationField.Optional.NOT_OPTIONAL),
                     new DropdownField(
                             "threshold_type",
-                            "Threshold Type",
+                            "临界类型",
                             ThresholdType.MORE.toString(),
                             Arrays.stream(ThresholdType.values()).collect(Collectors.toMap(Enum::toString, ThresholdType::getDescription)),
-                            "Select condition to trigger alert: when there are more or less messages than the threshold",
+                            "选择触发告警的条件: 当存在多于或者少于临界值的消息被检测到",
                             ConfigurationField.Optional.NOT_OPTIONAL),
-                    new NumberField("threshold", "Threshold", 0.0, "Value which triggers an alert if crossed", ConfigurationField.Optional.NOT_OPTIONAL)
+                    new NumberField("threshold", "临界值", 0.0, "告警触发的临界值", ConfigurationField.Optional.NOT_OPTIONAL)
             );
             configurationRequest.addFields(AbstractAlertCondition.getDefaultConfigurationFields());
             return configurationRequest;
@@ -106,9 +106,9 @@ public class ConditionalCountAlertCondition extends AbstractAlertCondition {
     public static class Descriptor extends AlertCondition.Descriptor {
         public Descriptor() {
             super(
-                "Message Conditional Count Alert Condition",
+                "消息 搜索条件-数目 告警条件",
                 "https://github.com/alcampos/graylog-plugin-alert-conditional-count",
-                "This condition is triggered when there are more or less messages (matching a defined query) than the threshold."
+                "该告警在满足条件且超过临界情况下被触发."
             );
         }
     }
@@ -172,9 +172,9 @@ public class ConditionalCountAlertCondition extends AbstractAlertCondition {
                         summaries.add(new MessageSummary(resultMessage.getIndex(), msg));
                     }
                 }
-                final String resultDescription = "Stream had " + count + " messages in the last " + time
-                        + " minutes with trigger condition " + thresholdType.toString().toLowerCase(Locale.ENGLISH)
-                        + " than " + threshold + " messages. " + "(Current grace time: " + grace + " minutes)";
+                final String resultDescription = "数据流检测到 " + count + " 条消息, 在最近的 " + time
+                        + " 分钟内， 切都满足条件 " + thresholdType.getDescription() +
+                        +  threshold + ". (当前宽限期: " + grace + " 分钟)";
                 return new CheckResult(true, this, resultDescription, Tools.nowUTC(), summaries);
             } else {
 			    LOG.debug("Alert check <{}> returned no results.", id);

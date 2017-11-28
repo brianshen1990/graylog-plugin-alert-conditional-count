@@ -45,9 +45,9 @@ public class ConditionalCountDecorator implements SearchResponseDecorator {
 
 	public static class Descriptor extends SearchResponseDecorator.Descriptor {
 		public Descriptor() {
-			super("Message Conditional Count Alert Condition",
-					"https://github.com/alcampos/graylog-plugin-alert-conditional-count",
-					"This condition is triggered when there are more or less messages (matching a defined query) than the threshold.");
+			super("消息 搜索条件-数目 告警条件",
+                    "https://github.com/alcampos/graylog-plugin-alert-conditional-count",
+                    "该告警在满足条件且超过临界情况下被触发.");
 		}
 	}
 }
